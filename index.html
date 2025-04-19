@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; script-src 'self'; style-src 'self'; img-src 'self' file:;">
+
+  <title>Screenshot App</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <h1>Assignment Problem</h1>
+
+  <label>Interval (ms): <input type="number" id="interval" value="500" /></label>
+  <label>Format:
+    <select id="format">
+      <option value="png">PNG</option>
+      <option value="jpg">JPEG</option>
+    </select>
+  </label>
+
+  <button id="select-folder">Select Destination Folder</button>
+  <p id="folder-path">Folder: Default (Desktop)</p>
+
+  <button id="start">Start Capturing</button>
+  <button id="stop" disabled>Stop Capturing</button>
+  <button id="exit">Exit</button>
+
+  <p id="capture-status"></p>
+  
+  <!-- <h2>Captured Screenshots</h2>
+  <div id="screenshot-list"></div> -->
+
+  <!-- ✅ Countdown display overlay -->
+  <div id="countdown" ></div>
+
+  <script src="renderer.js"></script>
+</body>
+
+
+</html>
