@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, dialog, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, Menu, dialog, Notification} = require('electron');
 const path = require('path');
 const screenshot = require('screenshot-desktop');
 const os = require('os');
@@ -9,7 +9,7 @@ let captureInterval;
 
 function createWindow() {
   win = new BrowserWindow({
-    fullscreen: true, // ✅ makes it fill the screen
+    fullscreen: true, 
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -47,6 +47,8 @@ ipcMain.handle('get-home-dir', () => {
   return require('os').homedir();
 });
 
+
+
 ipcMain.on('start-capturing', (event, { interval, folder, format }) => {
   if (captureInterval) clearInterval(captureInterval);
 
@@ -68,7 +70,7 @@ ipcMain.on('start-capturing', (event, { interval, folder, format }) => {
       new Notification({
         title: 'Screenshot Taken',
         body: `Saved as ${fileName}`,
-        silent: true
+        // silent: false
       }).show();
 
     }).catch((err) => console.error(err));
