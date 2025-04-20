@@ -19,23 +19,43 @@ startBtn.addEventListener('click', async () => {
   const interval = parseInt(intervalInput.value);
   const format = formatSelect.value;
   let folder = folderPath.dataset.path;
+  const countdownEl = document.getElementById('countdown');
+
   if (!folder) {
-    folder = await window.electronAPI.getHomeDir(); // safely get home directory from preload
+    folder = await window.electronAPI.getHomeDir();
   }
 
-  captureCount = 0;
-  window.electronAPI.startCapturing({ interval, format, folder });
-
-  statusText.textContent = `Capturing started... (0 screenshots)`;
-  startBtn.textContent = 'Capturing...';
+  // Countdown before start
+  let countdown = 3;
+  countdownEl.textContent = `Starting in ${countdown}...`;
   startBtn.disabled = true;
-  stopBtn.disabled = false;
+  stopBtn.disabled = true;
 
-  window.screenshotTimer = setInterval(() => {
-    captureCount++;
-    statusText.textContent = `Capturing... (${captureCount} screenshots)`;
-  }, interval);
+  const countdownTimer = setInterval(() => {
+    countdown--;
+    if (countdown > 0) {
+      countdownEl.textContent = `Starting in ${countdown}...`;
+    } else {
+      clearInterval(countdownTimer);
+      countdownEl.textContent = '';
+      
+      // Start capturing
+      captureCount = 0;
+      window.electronAPI.startCapturing({ interval, format, folder });
+
+      statusText.textContent = `Capturing started... (0 screenshots)`;
+      startBtn.textContent = 'Capturing...';
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+
+      window.screenshotTimer = setInterval(() => {
+        captureCount++;
+        statusText.textContent = `Capturing... (${captureCount} screenshots)`;
+      }, interval);
+    }
+  }, 1000);
 });
+
 
 stopBtn.addEventListener('click', () => {
   window.electronAPI.stopCapturing();
