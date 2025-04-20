@@ -49,24 +49,32 @@ ipcMain.handle('get-home-dir', () => {
 
 ipcMain.on('start-capturing', (event, { interval, folder, format }) => {
   if (captureInterval) clearInterval(captureInterval);
+
   captureInterval = setInterval(() => {
     screenshot({ format }).then((img) => {
-      // Save the screenshot to the specified folder
+      // Generate timestamped file name
       const now = new Date();
-      const timestamp = now.toISOString().replace(/:/g, '-').replace('T', '_').split('.')[0]; // yyyy-mm-dd_hh-mm-ss
-      const filePath = path.join(folder, `screenshot_${timestamp}.${format}`);
+      const timestamp = now.toISOString().replace(/:/g, '-').replace('T', '_').split('.')[0];
+      const fileName = `screenshot_${timestamp}.${format}`;
+      const filePath = path.join(folder, fileName);
 
+      // Save image to disk
       require('fs').writeFileSync(filePath, img);
 
-      // Create a new notification for the screenshot
+      // Send path to renderer for preview
+      win.webContents.send('screenshot-preview', 'file://' + filePath);
+
+      // Show system notification
       new Notification({
         title: 'Screenshot Taken',
-        body: `Saved as ${filePath.split(path.sep).pop()}`,
+        body: `Saved as ${fileName}`,
         silent: true
       }).show();
+
     }).catch((err) => console.error(err));
   }, interval);
 });
+
 
 ipcMain.on('stop-capturing', () => {
   if (captureInterval) clearInterval(captureInterval);

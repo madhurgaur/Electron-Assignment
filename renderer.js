@@ -70,3 +70,9 @@ stopBtn.addEventListener('click', () => {
 document.getElementById('exit').addEventListener('click', () => {
   window.close(); // Closes the Electron window
 });
+
+const previewImg = document.getElementById('screenshot-preview');
+
+window.electronAPI.onScreenshotPreview((fileUrl) => {
+  previewImg.src = fileUrl;
+});

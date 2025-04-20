@@ -89,3 +89,6 @@
   #countdown{
     font-size: 24px; font-weight: bold; color: red;
   }
+  #screenshot-preview{
+    max-width: 100%; border: 1px solid #ccc; margin-top: 1rem; 
+  }
